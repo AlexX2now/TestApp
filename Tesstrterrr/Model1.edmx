@@ -1,0 +1,347 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище TistirovanieeModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Вопрос$">
+          <Key>
+            <PropertyRef Name="Идентификатор" />
+          </Key>
+          <Property Name="Идентификатор" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Номер теста" Type="int" />
+          <Property Name="Номер вопроса" Type="int" />
+          <Property Name="Вопрос" Type="nvarchar" MaxLength="255" />
+          <Property Name="Вариант1" Type="nvarchar" MaxLength="255" />
+          <Property Name="Вариант2" Type="nvarchar" MaxLength="255" />
+          <Property Name="Вариант3" Type="nvarchar" MaxLength="255" />
+          <Property Name="Ответ" Type="int" />
+        </EntityType>
+        <EntityType Name="Дисциплины$">
+          <Key>
+            <PropertyRef Name="Номер" />
+          </Key>
+          <Property Name="Номер" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Наименование" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="История$">
+          <Key>
+            <PropertyRef Name="Номер" />
+          </Key>
+          <Property Name="Номер" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Логин" Type="nvarchar" MaxLength="255" />
+          <Property Name="Номер теста" Type="int" />
+          <Property Name="Результат" Type="nvarchar" MaxLength="255" />
+          <Property Name="Кол# Баллов" Type="int" />
+          <Property Name="Время" Type="time" Precision="7" />
+          <Property Name="Дата" Type="date" />
+        </EntityType>
+        <EntityType Name="Пользователь$">
+          <Key>
+            <PropertyRef Name="Логин" />
+          </Key>
+          <Property Name="Логин" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Пароль" Type="nvarchar" MaxLength="255" />
+          <Property Name="Фамилия" Type="nvarchar" MaxLength="255" />
+          <Property Name="Имя" Type="nvarchar" MaxLength="255" />
+          <Property Name="Отчество" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="Тест$">
+          <Key>
+            <PropertyRef Name="Номер" />
+          </Key>
+          <Property Name="Номер" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Название" Type="nvarchar" MaxLength="255" />
+          <Property Name="Номер дисциплины" Type="int" />
+        </EntityType>
+        <Association Name="FK_Вопрос$_Тест$">
+          <End Role="Тест$" Type="Self.Тест$" Multiplicity="0..1" />
+          <End Role="Вопрос$" Type="Self.Вопрос$" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Тест$">
+              <PropertyRef Name="Номер" />
+            </Principal>
+            <Dependent Role="Вопрос$">
+              <PropertyRef Name="Номер теста" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_История$_Пользователь$">
+          <End Role="Пользователь$" Type="Self.Пользователь$" Multiplicity="0..1" />
+          <End Role="История$" Type="Self.История$" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Пользователь$">
+              <PropertyRef Name="Логин" />
+            </Principal>
+            <Dependent Role="История$">
+              <PropertyRef Name="Логин" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_История$_Тест$">
+          <End Role="Тест$" Type="Self.Тест$" Multiplicity="0..1" />
+          <End Role="История$" Type="Self.История$" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Тест$">
+              <PropertyRef Name="Номер" />
+            </Principal>
+            <Dependent Role="История$">
+              <PropertyRef Name="Номер теста" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Тест$_Дисциплины$">
+          <End Role="Дисциплины$" Type="Self.Дисциплины$" Multiplicity="0..1" />
+          <End Role="Тест$" Type="Self.Тест$" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Дисциплины$">
+              <PropertyRef Name="Номер" />
+            </Principal>
+            <Dependent Role="Тест$">
+              <PropertyRef Name="Номер дисциплины" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище TistirovanieeModelContainer">
+          <EntitySet Name="Вопрос$" EntityType="Self.Вопрос$" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Дисциплины$" EntityType="Self.Дисциплины$" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="История$" EntityType="Self.История$" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Пользователь$" EntityType="Self.Пользователь$" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Тест$" EntityType="Self.Тест$" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Вопрос$_Тест$" Association="Self.FK_Вопрос$_Тест$">
+            <End Role="Тест$" EntitySet="Тест$" />
+            <End Role="Вопрос$" EntitySet="Вопрос$" />
+          </AssociationSet>
+          <AssociationSet Name="FK_История$_Пользователь$" Association="Self.FK_История$_Пользователь$">
+            <End Role="Пользователь$" EntitySet="Пользователь$" />
+            <End Role="История$" EntitySet="История$" />
+          </AssociationSet>
+          <AssociationSet Name="FK_История$_Тест$" Association="Self.FK_История$_Тест$">
+            <End Role="Тест$" EntitySet="Тест$" />
+            <End Role="История$" EntitySet="История$" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Тест$_Дисциплины$" Association="Self.FK_Тест$_Дисциплины$">
+            <End Role="Дисциплины$" EntitySet="Дисциплины$" />
+            <End Role="Тест$" EntitySet="Тест$" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="TistirovanieeModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Вопрос_">
+          <Key>
+            <PropertyRef Name="Идентификатор" />
+          </Key>
+          <Property Name="Идентификатор" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Номер_теста" Type="Int32" />
+          <Property Name="Номер_вопроса" Type="Int32" />
+          <Property Name="Вопрос" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Вариант1" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Вариант2" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Вариант3" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Ответ" Type="Int32" />
+          <NavigationProperty Name="Тест_" Relationship="Self.FK_Вопрос__Тест_" FromRole="Вопрос_" ToRole="Тест_" />
+        </EntityType>
+        <EntityType Name="Дисциплины_">
+          <Key>
+            <PropertyRef Name="Номер" />
+          </Key>
+          <Property Name="Номер" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Наименование" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Тест_" Relationship="Self.FK_Тест__Дисциплины_" FromRole="Дисциплины_" ToRole="Тест_" />
+        </EntityType>
+        <EntityType Name="История_">
+          <Key>
+            <PropertyRef Name="Номер" />
+          </Key>
+          <Property Name="Номер" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Логин" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Номер_теста" Type="Int32" />
+          <Property Name="Результат" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Кол__Баллов" Type="Int32" />
+          <Property Name="Время" Type="Time" Precision="7" />
+          <Property Name="Дата" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="Пользователь_" Relationship="Self.FK_История__Пользователь_" FromRole="История_" ToRole="Пользователь_" />
+          <NavigationProperty Name="Тест_" Relationship="Self.FK_История__Тест_" FromRole="История_" ToRole="Тест_" />
+        </EntityType>
+        <EntityType Name="Пользователь_">
+          <Key>
+            <PropertyRef Name="Логин" />
+          </Key>
+          <Property Name="Логин" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Пароль" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Фамилия" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Имя" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Отчество" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="История_" Relationship="Self.FK_История__Пользователь_" FromRole="Пользователь_" ToRole="История_" />
+        </EntityType>
+        <EntityType Name="Тест_">
+          <Key>
+            <PropertyRef Name="Номер" />
+          </Key>
+          <Property Name="Номер" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Название" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Номер_дисциплины" Type="Int32" />
+          <NavigationProperty Name="Вопрос_" Relationship="Self.FK_Вопрос__Тест_" FromRole="Тест_" ToRole="Вопрос_" />
+          <NavigationProperty Name="Дисциплины_" Relationship="Self.FK_Тест__Дисциплины_" FromRole="Тест_" ToRole="Дисциплины_" />
+          <NavigationProperty Name="История_" Relationship="Self.FK_История__Тест_" FromRole="Тест_" ToRole="История_" />
+        </EntityType>
+        <Association Name="FK_Вопрос__Тест_">
+          <End Role="Тест_" Type="Self.Тест_" Multiplicity="0..1" />
+          <End Role="Вопрос_" Type="Self.Вопрос_" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Тест_">
+              <PropertyRef Name="Номер" />
+            </Principal>
+            <Dependent Role="Вопрос_">
+              <PropertyRef Name="Номер_теста" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Тест__Дисциплины_">
+          <End Role="Дисциплины_" Type="Self.Дисциплины_" Multiplicity="0..1" />
+          <End Role="Тест_" Type="Self.Тест_" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Дисциплины_">
+              <PropertyRef Name="Номер" />
+            </Principal>
+            <Dependent Role="Тест_">
+              <PropertyRef Name="Номер_дисциплины" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_История__Пользователь_">
+          <End Role="Пользователь_" Type="Self.Пользователь_" Multiplicity="0..1" />
+          <End Role="История_" Type="Self.История_" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Пользователь_">
+              <PropertyRef Name="Логин" />
+            </Principal>
+            <Dependent Role="История_">
+              <PropertyRef Name="Логин" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_История__Тест_">
+          <End Role="Тест_" Type="Self.Тест_" Multiplicity="0..1" />
+          <End Role="История_" Type="Self.История_" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Тест_">
+              <PropertyRef Name="Номер" />
+            </Principal>
+            <Dependent Role="История_">
+              <PropertyRef Name="Номер_теста" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="TistirovanieeEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Вопрос_" EntityType="Self.Вопрос_" />
+          <EntitySet Name="Дисциплины_" EntityType="Self.Дисциплины_" />
+          <EntitySet Name="История_" EntityType="Self.История_" />
+          <EntitySet Name="Пользователь_" EntityType="Self.Пользователь_" />
+          <EntitySet Name="Тест_" EntityType="Self.Тест_" />
+          <AssociationSet Name="FK_Вопрос__Тест_" Association="Self.FK_Вопрос__Тест_">
+            <End Role="Тест_" EntitySet="Тест_" />
+            <End Role="Вопрос_" EntitySet="Вопрос_" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Тест__Дисциплины_" Association="Self.FK_Тест__Дисциплины_">
+            <End Role="Дисциплины_" EntitySet="Дисциплины_" />
+            <End Role="Тест_" EntitySet="Тест_" />
+          </AssociationSet>
+          <AssociationSet Name="FK_История__Пользователь_" Association="Self.FK_История__Пользователь_">
+            <End Role="Пользователь_" EntitySet="Пользователь_" />
+            <End Role="История_" EntitySet="История_" />
+          </AssociationSet>
+          <AssociationSet Name="FK_История__Тест_" Association="Self.FK_История__Тест_">
+            <End Role="Тест_" EntitySet="Тест_" />
+            <End Role="История_" EntitySet="История_" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище TistirovanieeModelContainer" CdmEntityContainer="TistirovanieeEntities">
+          <EntitySetMapping Name="Вопрос_">
+            <EntityTypeMapping TypeName="TistirovanieeModel.Вопрос_">
+              <MappingFragment StoreEntitySet="Вопрос$">
+                <ScalarProperty Name="Идентификатор" ColumnName="Идентификатор" />
+                <ScalarProperty Name="Номер_теста" ColumnName="Номер теста" />
+                <ScalarProperty Name="Номер_вопроса" ColumnName="Номер вопроса" />
+                <ScalarProperty Name="Вопрос" ColumnName="Вопрос" />
+                <ScalarProperty Name="Вариант1" ColumnName="Вариант1" />
+                <ScalarProperty Name="Вариант2" ColumnName="Вариант2" />
+                <ScalarProperty Name="Вариант3" ColumnName="Вариант3" />
+                <ScalarProperty Name="Ответ" ColumnName="Ответ" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Дисциплины_">
+            <EntityTypeMapping TypeName="TistirovanieeModel.Дисциплины_">
+              <MappingFragment StoreEntitySet="Дисциплины$">
+                <ScalarProperty Name="Номер" ColumnName="Номер" />
+                <ScalarProperty Name="Наименование" ColumnName="Наименование" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="История_">
+            <EntityTypeMapping TypeName="TistirovanieeModel.История_">
+              <MappingFragment StoreEntitySet="История$">
+                <ScalarProperty Name="Номер" ColumnName="Номер" />
+                <ScalarProperty Name="Логин" ColumnName="Логин" />
+                <ScalarProperty Name="Номер_теста" ColumnName="Номер теста" />
+                <ScalarProperty Name="Результат" ColumnName="Результат" />
+                <ScalarProperty Name="Кол__Баллов" ColumnName="Кол# Баллов" />
+                <ScalarProperty Name="Время" ColumnName="Время" />
+                <ScalarProperty Name="Дата" ColumnName="Дата" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Пользователь_">
+            <EntityTypeMapping TypeName="TistirovanieeModel.Пользователь_">
+              <MappingFragment StoreEntitySet="Пользователь$">
+                <ScalarProperty Name="Логин" ColumnName="Логин" />
+                <ScalarProperty Name="Пароль" ColumnName="Пароль" />
+                <ScalarProperty Name="Фамилия" ColumnName="Фамилия" />
+                <ScalarProperty Name="Имя" ColumnName="Имя" />
+                <ScalarProperty Name="Отчество" ColumnName="Отчество" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Тест_">
+            <EntityTypeMapping TypeName="TistirovanieeModel.Тест_">
+              <MappingFragment StoreEntitySet="Тест$">
+                <ScalarProperty Name="Номер" ColumnName="Номер" />
+                <ScalarProperty Name="Название" ColumnName="Название" />
+                <ScalarProperty Name="Номер_дисциплины" ColumnName="Номер дисциплины" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
